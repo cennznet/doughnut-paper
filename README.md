@@ -16,5 +16,6 @@ Doughnuts let us:
 
 # Read more
 * [Overview](./overview.md)
-* [Format specification](./format.md)
+* [Format Specification](./format.md)
+* [CENNZnet Permission Domain Specification](./CENNZnet_format.md)
  
