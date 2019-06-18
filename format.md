@@ -101,6 +101,11 @@ Signature of `<VERSION><PAYLOAD>`, signed by the issuer.
 * Schnorrkel signature
     * The last 512 bits
 
+### 1
+
+* Ed25519 signature
+    * The last 512 bits
+
 # Length
 
 Doughnut compacts have no leading length value. This allows us to:
