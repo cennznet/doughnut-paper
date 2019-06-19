@@ -1,5 +1,7 @@
 # Doughnut Format Specification
 
+**Patent Pending**
+
 This document outlines the format of Doughnut certificates. These are optimised for space efficiency, as we want the impact on-chain to be minimal.
 
 ## Structure

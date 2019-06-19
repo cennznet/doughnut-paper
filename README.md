@@ -1,8 +1,12 @@
-# What are Doughnuts?
+# Doughnuts
+
+**Patent Pending**
+
+## What are Doughnuts?
 At their simplest, Doughnuts are Proofs of Delegation between two or more cryptographic keypairs.
 Doughnuts let us prove that one address delegates something to another address.
 
-# What can they do?
+## What can they do?
 Doughnuts let us:
 
 * Easily sign in and out of DApps without using centralised services

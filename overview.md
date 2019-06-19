@@ -1,5 +1,7 @@
 # Doughnut Overview
 
+**Patent Pending**
+
 Blockchain technology has need of powerful, seamless authentication and access control.
 
 This need leads from the success of centralised services in providing excellent user sign-in experiences, most notably in the widespread adoption of Single Sign-On (SSO) models.

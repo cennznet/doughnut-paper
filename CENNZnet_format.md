@@ -1,5 +1,7 @@
 # CENNZnet Doughnut Permission Domain Specification
 
+**Patent Pending**
+
 This document outlines the format of the CENNZnet Doughnut Permission Domain.
 
 ## Structure
