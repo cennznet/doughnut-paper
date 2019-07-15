@@ -122,6 +122,10 @@ These fields are common to doughnut certificates.
 6.  The `holder`  or the `issuer`  may revoke the `doughnut`  at any time before `expires`
 7.  Once `expires`  has passed, the  `doughnut` becomes invalid
 
+#### Validating a `doughnut`
+Validation procedures are specified by the `doughnut` [format](./format.md##verification).
+
+
 #### Executing with a `doughnut`  on CENNZnet
 
 1.  The `doughnut`  bearing extrinsic **MUST**  be valid
@@ -129,4 +133,3 @@ These fields are common to doughnut certificates.
 3.  An extrinsic bearing a  `doughnut`  **MUST** contain a valid non-empty `cennznet`  permissions domain
 4.  The  `doughnut.certificate.permissions.cennznet` `permission set` is to be extracted
 5.  The extrinsic's specified target and arguments, and all consequent internal transactions **MUST**  be a subset of the `permission set`
-

@@ -24,6 +24,18 @@ The version specifies the version of the certificate payload encoding, and the s
         * Unsigned integer
         * LE
 
+## Verification
+To verify a doughnut requires two steps be carried out:
+
+1. Verify the issuer's signature
+    1. Separate `<VERSION><PAYLOAD>` from `<SIGNATURE>`
+    2. Extract the issuer public key from `PAYLOAD` as `ISSUER`
+        * How this is done depends on the payload version
+    3. Verify `SIGNATURE` is valid given a message of `<VERSION><PAYLOAD>` and a signer of `ISSUER`
+        * How this is done depends on the signing method
+2. Verify the payload
+    * How this is done depends on the payload version
+
 ## Payload
 
 ### 0
@@ -67,19 +79,23 @@ The version specifies the version of the certificate payload encoding, and the s
     * X bytes
         * Permission domain payload
 
-##### Notes
+#### Verification
 
-Permission domain list ordering:
+To verify a v0 payload:
+1. If set, NotBefore must be less than a current unix timestamp.
+2. Expiry must be greater than a current unix timestamp.
 
-* The permission domain lists must hold the same domain at the same index. E.g. the cennznet permission domain must have the same index in both lists.
+#### Notes
+##### Permission domain list ordering
+The permission domain lists must hold the same domain at the same index.
 
-Restrictions:
+E.g. the cennznet permission domain must have the same index in both lists.
 
+##### Restrictions
 * Maximum of 128 permission domains per doughnut
 * Public keys no larger than 256bit
 
-To retrieving a permission domain payload:
-
+##### Retrieving a permission domain payload
 1.  Retrieve the permission domain count from the leading byte, and increment by 1
 2.  Step forward to the start of the payload lengths list. If NotBefore is present:
     1.  Look ahead to the 70th payload byte
@@ -99,14 +115,14 @@ To retrieving a permission domain payload:
 Signature of `<VERSION><PAYLOAD>`, signed by the issuer.
 
 ### 0
-
 * Schnorrkel signature
-    * The last 512 bits
+    * Separation:
+        * The last 64 bytes
 
 ### 1
-
 * Ed25519 signature
-    * The last 512 bits
+    * Separation:
+        * The last 64 bytes
 
 # Length
 
