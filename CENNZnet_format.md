@@ -66,7 +66,8 @@ The domain is binary encoded. It contains a version definition, and a permission
 
 Decode steps:
 
-1. Read the first byte, as `module_count`
+1. Read the first byte, as `module_count`, and increment it by 1
+    - ∵ A valid `permissions` object requires at least one module to be specified, resulting in `module_count` always being greater than 0. This allows us to avoid representing 0, such that our `module_count` is defined in the range, `[0 + 1, 256 + 1]`.
 2. Begin reading modules list items
     1. Read the first byte
         - Read the first bit as `has_block_cooldown` Boolean
@@ -83,9 +84,8 @@ Decode steps:
         3. If `has_block_cooldown`
             - Read 4 bytes as `block_cooldown`
         4. If `has_constraints`
-            - Read 1 byte as `constraints_length`
+            - Read 1 byte as `constraints_length` and increment it by 1
+                - ∵ There exists a bit to indicate the presence of constraints (i.e., `has_constraints`), which allows us to define `constraints_length` in the range of `[0 + 1, 256 + 1]`.
             - Read `constraints_length` bytes as `constraints`
         5. Repeat until `method_count` matches iterations
     5. Repeat until `module_count` matches iterations
-
-
