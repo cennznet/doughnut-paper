@@ -89,3 +89,13 @@ Decode steps:
             - Read `constraints_length` bytes as `constraints`
         5. Repeat until `method_count` matches iterations
     5. Repeat until `module_count` matches iterations
+
+Wildcards:
+1.  Any module named `"*"` is a wildcard
+    1.  A wildcard module enables all modules
+    2.  Constraints applied to a wildcard module such as `methods` and `block_cooldown` apply
+    3.  Named module constraints take priority over wildcard module constraints
+2.  Any method named `"*"` is a wildcard
+    1.  A wildcard method enables all methods for the module it is listed under
+    2.  Constraints applied to a wildcard method such as `block_cooldown` and `constraints` apply
+    3.  Named method constraists take priority over wildcard module constraints
