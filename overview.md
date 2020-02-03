@@ -35,7 +35,7 @@ Blockchain access control is currently focussed on two solutions:
 -   Transactions signed by an application are "executed" by a permissioned identity smart contract
 
 These approaches may be used together in different ways if necessary, but the end result is largely the same.
-  
+
 |  |Pros|Cons|
 |--|--|--|
 | Signing device |<ul><li>Applications don't need to hold keypairs</li><li>No fee associated with sharing authority between apps</li></ul>|<ul><li>User must approve every signature manually<ul><li>User must check every transaction for malicious activity</li><li>No way to prevent an unexpected internal transaction call</li></ul></li><li>User must have access to the device while using applications</li></ul>|
@@ -47,7 +47,7 @@ These approaches may be used together in different ways if necessary, but the en
 A `Doughnut`  is an attenuated permissions `certificate`  issued off-chain from one private key (the  `issuer`), usually to another private key (the `holder`).
 
 On CENNZnet, `Doughnut`s will allow:
-* Identity delegation: the `holder` acts as the `issuer,` with a subset of permissions  
+* Identity delegation: the `holder` acts as the `issuer,` with a subset of permissions
 * Fee delegation: the `issuer` pays for the fees of the `holder` when specific resources are accessed
 * Contract access control: the `holder` may access special features in a smart contract or runtime module
 * and more
@@ -91,11 +91,13 @@ These fields are common to doughnut certificates.
 	"issuer": "5fe33be52021fbe7056d7e9ceb0d12dfc938193fe3b54c3ee05021f639f0d95df2",
 	"permissions": {
 		"cennznet": {
-			"GenericAsset": {
-				"transfer": {}
+			"modules": {
+				"GenericAsset": {
+					"transfer": {}
+				},
 			},
-			"d0a98...56d7e9c": {
-				"bet": {}
+			"contracts": {
+				"d0a98...56d7e9c": {}
 			}
 		}
 	}
@@ -106,7 +108,7 @@ These fields are common to doughnut certificates.
 ## `Doughnut` lifecycle
 
 1.  A  `doughnut` is requested by an application or service from an `issuer`.
-	 The requester will become the `holder`  of the  `doughnut`. 
+	 The requester will become the `holder`  of the  `doughnut`.
     -   A  `doughnut` request **MUST**  specify:
         -   Requested permissions object (non-empty)
         -   The `holder`'s public key
