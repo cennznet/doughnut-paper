@@ -110,6 +110,11 @@ E.g. the cennznet permission domain must have the same index in both lists.
     1.  From the start of the payload lengths list, step forward by `(domain_count * 18)`
 6.  Step forward by `domain_offset`, and extract the next `payload_length` bytes
 
+### Not Before Zero / Missing
+A `0` or unspecified (`null`, `None`, etc.) 'not before' value should __not__ be encoded into the doughnut payload
+- The 'not before' bit should be set off (`0`)
+- When decoding a 'not before' bit set off (`0`). The 'not before' value should be decoded/presented as `0`
+
 # Signature
 
 Signature of `<VERSION><PAYLOAD>`, signed by the issuer.
