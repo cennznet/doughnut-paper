@@ -120,11 +120,11 @@ The domain is binary encoded. It contains a version definition, and a permission
     1.  A wildcard module enables all modules
     2.  Constraints applied to a wildcard module such as `methods` and `block_cooldown` apply
     3.  Named module constraints take priority over wildcard module constraints
-2.  Any contract named `"*"` is a wildcard
+2.  Any contract with address `[0x00; 32]` is a wildcard
     1.  A wildcard contract enables all contracts
     2.  Constraints applied to a wildcard contract such as `block_cooldown` apply
-    3.  Named contract constraints take priority over wildcard contract constraints
+    3.  Contraints of explicitly identified contracts take priority over contraints of a contract wildcard
 3.  Any method named `"*"` is a wildcard
     1.  A wildcard method enables all methods for the module or contract it is listed under
     2.  Constraints applied to a wildcard method such as `block_cooldown` and `pact` apply
-    3.  Named method constraists take priority over wildcard method constraints
+    3.  Named method constraints take priority over wildcard method constraints
