@@ -13,9 +13,9 @@ Both bit and byte order are little-endian (eg, `0b10000000_00000000 = 1_u16`).
 ## Structure
 
 A doughnut contains:
-* a `version` definition
-* the version specific certificate `payload` encoding of the doughnut
-* the certificate `signature`.
+* a `VERSION` definition
+* the version specific certificate `PAYLOAD` encoding of the doughnut
+* the certificate `SIGNATURE`.
 
 ```
 <VERSION><PAYLOAD><SIGNATURE>

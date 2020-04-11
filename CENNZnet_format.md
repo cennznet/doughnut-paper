@@ -4,9 +4,17 @@
 
 This document outlines the format of the CENNZnet Doughnut Permission Domain.
 
+## Encoding
+
+A CENNZnut is little-endian binary encoded.
+
+Both bit and byte order are little-endian (eg, `0b10000000_00000000 = 1_u16`).
+
 ## Structure
 
-The domain is binary encoded. It contains a version definition, and a permissions definition.
+A CENNZnut contains:
+* a `VERSION` definition
+* a `PERMISSIONS` definition
 
 ```
 <VERSION><PERMISSIONS>
@@ -16,7 +24,6 @@ The domain is binary encoded. It contains a version definition, and a permission
 
 * 10 bits
     * Version number
-    * LE unsigned integer
 * 6 bits
     * Reserved/unused
 
@@ -27,21 +34,18 @@ The domain is binary encoded. It contains a version definition, and a permission
 
 * 1 byte
     * `module_count`
-    * LE unsigned integer
 * Modules list
     * 1 byte
         * 1 bit
             * `has_block_cooldown` flag
         * 7 bits
             * `method_count`
-            * LE unsigned integer
     * 32 bytes
         * `module_name`
         * String
     * If `has_block_cooldown`
         * 4 bytes
             * `block_cooldown`
-            * LE unsigned integer
     * Methods list
         * 1 byte
             * 1 bit
@@ -56,17 +60,14 @@ The domain is binary encoded. It contains a version definition, and a permission
         * If `block_cooldown` is set
             * 4 bytes
                 * `block_cooldown`
-                * LE unsigned integer
         * If `has_pact` is set
             * 1 byte
                 * `pact_length`
-                * LE unsigned integer
                 * `pact_length` = byte_value + 1
             * `pact_length` bytes
                 * `pact`
 * 1 byte
     * `contract_count`
-    * LE unsigned integer
 * Contracts list
     * 1 byte
         * 1 bit
@@ -75,11 +76,9 @@ The domain is binary encoded. It contains a version definition, and a permission
             * Reserved
     * 32 bytes
         * `contract_address`
-        * LE unsigned integer
     * If `has_block_cooldown`
         * 4 bytes
             * `block_cooldown`
-            * LE unsigned integer
 
 ### Decode Steps
 
