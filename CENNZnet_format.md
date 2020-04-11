@@ -33,13 +33,15 @@ A CENNZnut contains:
 **Note:** *Subject to change*
 
 * 1 byte
-    * `module_count`
+    * `module_count` = value + 1
+    * Range = [1, 256]
 * Modules list
     * 1 byte
         * 1 bit
             * `has_block_cooldown` flag
         * 7 bits
-            * `method_count`
+            * `method_count` = value + 1
+            * Range = [1, 128]
     * 32 bytes
         * `module_name`
         * String
@@ -62,12 +64,11 @@ A CENNZnut contains:
                 * `block_cooldown`
         * If `has_pact` is set
             * 1 byte
-                * `pact_length`
-                * `pact_length` = byte_value + 1
+                * `pact_length` = value + 1
             * `pact_length` bytes
                 * `pact`
 * 1 byte
-    * `contract_count`
+    * `contract_count` = value
 * Contracts list
     * 1 byte
         * 1 bit
@@ -82,11 +83,11 @@ A CENNZnut contains:
 
 ### Decode Steps
 
-1. Read the first byte, as `module_count`
+1. Read the first byte, as `module_count` and increment it by 1
 2. Begin reading module list items
     1. Read the first byte
         - Read the first bit as `has_block_cooldown` Boolean
-        - Read the last 7 bits as `method_count`
+        - Read the last 7 bits as `method_count` and increment it by 1
     2. Read 32 bytes as `module_name`
     3. If `has_block_cooldown`
         - Read 4 bytes as `block_cooldown`
@@ -112,6 +113,23 @@ A CENNZnut contains:
     3. If `has_block_cooldown`
         - Read 4 bytes as `block_cooldown`
     4. Repeat until `contract_count` matches iterations
+
+### Smart Contracts
+
+Any CENNZnut with smart contract permissions must also assign runtime module permissions for the contracts module:
+```json
+{
+    "modules": {
+        "contracts": {
+            "call": {}
+        }
+    },
+    "contracts": {
+        "d0a98...56d7e9c": {},
+        "b2150...2f40a21": {},
+    }
+}
+```
 
 ### Wildcards
 
