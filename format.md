@@ -42,13 +42,9 @@ To verify a doughnut:
         * How this is done depends on the payload version
     3. Verify `SIGNATURE` is valid given a message of `<VERSION><PAYLOAD>` and a signer of `ISSUER`
         * How this is done depends on the signing method
-2. Verify the user's account is the `HOLDER`
-    1. Extract the holder public key from `PAYLOAD` as `HOLDER`
-        * How this is done depends on the payload version
-    2. Verify the account attempting to use the doughnut matches the `HOLDER`
-3. Verify the payload
+2. Verify the payload
     * How this is done depends on the payload version
-4. Verify the length of the doughnut does not exceed what is inferred by the `PAYLOAD`
+3. Verify the length of the doughnut does not exceed what is inferred by the `PAYLOAD`
     * The expected length of the doughnut can be inferred by the `PAYLOAD` of the doughnut
     * Reject doughnuts which exceed their required length
     * How this is done depends on the payload version
