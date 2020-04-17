@@ -4,9 +4,18 @@
 
 This document outlines the format of Doughnut certificates. These are optimised for space efficiency, as we want the impact on-chain to be minimal.
 
+## Encoding
+
+A doughnut is little-endian binary encoded.
+
+Both bit and byte order are little-endian (eg, `0b10000000_00000000 = 1_u16`).
+
 ## Structure
 
-A doughnut is binary encoded. It contains a version definition, the version specific encoding of the doughnut, and the certificate signature.
+A doughnut contains:
+* a `VERSION` definition
+* the version specific certificate `PAYLOAD` encoding of the doughnut
+* the certificate `SIGNATURE`.
 
 ```
 <VERSION><PAYLOAD><SIGNATURE>
@@ -25,7 +34,7 @@ The version specifies the version of the certificate payload encoding, and the s
         * LE
 
 ## Verification
-To verify a doughnut requires two steps be carried out:
+To verify a doughnut:
 
 1. Verify the issuer's signature
     1. Separate `<VERSION><PAYLOAD>` from `<SIGNATURE>`
@@ -35,55 +44,50 @@ To verify a doughnut requires two steps be carried out:
         * How this is done depends on the signing method
 2. Verify the payload
     * How this is done depends on the payload version
+3. Verify the length of the doughnut does not exceed what is inferred by the `PAYLOAD`
+    * The expected length of the doughnut can be inferred by the `PAYLOAD` of the doughnut
+    * Reject doughnuts which exceed their required length
+    * How this is done depends on the payload version
 
 ## Payload
 
 ### 0
 
 * 1 byte
-    * 1 bit  
-
+    * 1 bit
         * Indicates NotBefore timestamp inclusion when 1
-    * 2-8 bits  
-
+    * 2-8 bits
         * Permission domain count
         * Unsigned integer
-        * LE
         * To be incremented by 1 when read, shifting range from 0-127 to 1-128
 * 32 bytes
-
     * Issuer public key
-* 32 bytes  
-
+* 32 bytes
     * Holder public key
 * 4 bytes
     * Expiry, UNIX timestamp
     * Unsigned integer
-    * LE
 * If NotBefore
-    * 4 bytes  
-
+    * 4 bytes
         * NotBefore, UNIX timestamp
         * Unsigned integer
-        * LE
-* List  
-
+* List
     * Permission domain payload lengths
     * 16 bytes
         * Permission domain ID (E.g. "cennznet", a UUID, or a unique number)
     * 2 bytes
         * Length of permission domain payload in bytes
         * Unsigned integer
-        * LE
 * List
     * X bytes
         * Permission domain payload
 
-#### Verification
+#### Payload Verification
 
 To verify a v0 payload:
 1. If set, NotBefore must be less than a current unix timestamp.
 2. Expiry must be greater than a current unix timestamp.
+3. The domain list must not contain duplicate domain names.
 
 #### Notes
 ##### Permission domain list ordering

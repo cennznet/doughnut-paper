@@ -4,9 +4,17 @@
 
 This document outlines the format of the CENNZnet Doughnut Permission Domain.
 
+## Encoding
+
+A CENNZnut is little-endian binary encoded.
+
+Both bit and byte order are little-endian (eg, `0b10000000_00000000 = 1_u16`).
+
 ## Structure
 
-The domain is binary encoded. It contains a version definition, and a permissions definition.
+A CENNZnut contains:
+* a `VERSION` definition
+* a `PERMISSIONS` definition
 
 ```
 <VERSION><PERMISSIONS>
@@ -16,7 +24,6 @@ The domain is binary encoded. It contains a version definition, and a permission
 
 * 10 bits
     * Version number
-    * LE unsigned integer
 * 6 bits
     * Reserved/unused
 
@@ -26,22 +33,21 @@ The domain is binary encoded. It contains a version definition, and a permission
 **Note:** *Subject to change*
 
 * 1 byte
-    * `module_count`
-    * LE unsigned integer
+    * `module_count` = value + 1
+    * Range = [1, 256]
 * Modules list
     * 1 byte
         * 1 bit
             * `has_block_cooldown` flag
         * 7 bits
-            * `method_count`
-            * LE unsigned integer
+            * `method_count` = value + 1
+            * Range = [1, 128]
     * 32 bytes
         * `module_name`
         * String
     * If `has_block_cooldown`
         * 4 bytes
             * `block_cooldown`
-            * LE unsigned integer
     * Methods list
         * 1 byte
             * 1 bit
@@ -56,17 +62,13 @@ The domain is binary encoded. It contains a version definition, and a permission
         * If `block_cooldown` is set
             * 4 bytes
                 * `block_cooldown`
-                * LE unsigned integer
         * If `has_pact` is set
             * 1 byte
-                * `pact_length`
-                * LE unsigned integer
-                * `pact_length` = byte_value + 1
+                * `pact_length` = value + 1
             * `pact_length` bytes
                 * `pact`
 * 1 byte
-    * `contract_count`
-    * LE unsigned integer
+    * `contract_count` = value
 * Contracts list
     * 1 byte
         * 1 bit
@@ -75,19 +77,17 @@ The domain is binary encoded. It contains a version definition, and a permission
             * Reserved
     * 32 bytes
         * `contract_address`
-        * LE unsigned integer
     * If `has_block_cooldown`
         * 4 bytes
             * `block_cooldown`
-            * LE unsigned integer
 
 ### Decode Steps
 
-1. Read the first byte, as `module_count`
+1. Read the first byte, as `module_count` and increment it by 1
 2. Begin reading module list items
     1. Read the first byte
         - Read the first bit as `has_block_cooldown` Boolean
-        - Read the last 7 bits as `method_count`
+        - Read the last 7 bits as `method_count` and increment it by 1
     2. Read 32 bytes as `module_name`
     3. If `has_block_cooldown`
         - Read 4 bytes as `block_cooldown`
@@ -113,6 +113,23 @@ The domain is binary encoded. It contains a version definition, and a permission
     3. If `has_block_cooldown`
         - Read 4 bytes as `block_cooldown`
     4. Repeat until `contract_count` matches iterations
+
+### Smart Contracts
+
+Any CENNZnut with smart contract permissions must also assign runtime module permissions for the contracts module:
+```json
+{
+    "modules": {
+        "contracts": {
+            "call": {}
+        }
+    },
+    "contracts": {
+        "d0a98...56d7e9c": {},
+        "b2150...2f40a21": {},
+    }
+}
+```
 
 ### Wildcards
 
