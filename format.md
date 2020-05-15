@@ -6,9 +6,7 @@ This document outlines the format of Doughnut certificates. These are optimised 
 
 ## Encoding
 
-A doughnut is little-endian binary encoded.
-
-Both bit and byte order are little-endian (eg, `0b10000000_00000000 = 1_u16`).
+A CENNZnut represents values as little-endian.
 
 ## Structure
 
@@ -25,13 +23,11 @@ A doughnut contains:
 
 The version specifies the version of the certificate payload encoding, and the signature method. This tells the reader how to interpret the payload, and how to separate and verify the signature.
 
-* 2 bytes
-    * 11 bits: Payload version number
-        * Unsigned integer
-        * LE
-    * 5 bits: Signature method number
-        * Unsigned integer
-        * LE
+* 16-bit value with the following structure:
+    * bits 0..10: Payload version number
+        * Unsigned 11-bit integer
+    * bits 11..15: Signature method number
+        * Unsigned 5-bit integer
 
 ## Verification
 To verify a doughnut:
@@ -54,30 +50,30 @@ To verify a doughnut:
 ### 0
 
 * 1 byte
-    * 1 bit
-        * Indicates NotBefore timestamp inclusion when 1
-    * 2-8 bits
+    * bit 0
+        * Indicates NotBefore timestamp inclusion when set
+    * bits 1..7
         * Permission domain count
-        * Unsigned integer
-        * To be incremented by 1 when read, shifting range from 0-127 to 1-128
+        * Unsigned 7-bit integer
+        * Increment by 1 when read (range 1 - 128)
 * 32 bytes
     * Issuer public key
 * 32 bytes
     * Holder public key
 * 4 bytes
     * Expiry, UNIX timestamp
-    * Unsigned integer
+    * Unsigned 32-bit integer
 * If NotBefore
     * 4 bytes
         * NotBefore, UNIX timestamp
-        * Unsigned integer
+        * Unsigned 32-bit integer
 * List
     * Permission domain payload lengths
     * 16 bytes
         * Permission domain ID (E.g. "cennznet", a UUID, or a unique number)
     * 2 bytes
         * Length of permission domain payload in bytes
-        * Unsigned integer
+        * Unsigned 16-bit integer
 * List
     * X bytes
         * Permission domain payload

@@ -6,9 +6,7 @@ This document outlines the format of the CENNZnet Doughnut Permission Domain.
 
 ## Encoding
 
-A CENNZnut is little-endian binary encoded.
-
-Both bit and byte order are little-endian (eg, `0b10000000_00000000 = 1_u16`).
+A CENNZnut represents values as little-endian.
 
 ## Structure
 
@@ -22,10 +20,12 @@ A CENNZnut contains:
 
 # Version
 
-* 10 bits
-    * Version number
-* 6 bits
-    * Reserved/unused
+* Represented as a 16-bit value with the following structure:
+    * bits 0..9
+        * Version number
+        * Unsigned 10-bit integer
+    * bits 10..15
+        * Reserved/unused
 
 # Permissions
 ## v0
@@ -33,28 +33,31 @@ A CENNZnut contains:
 **Note:** *Subject to change*
 
 * 1 byte
-    * `module_count` = value + 1
-    * Range = [1, 256]
+    * `module_count`
+    * Unsigned 8-bit integer
+    * Increment by 1 when read (range 1 - 256)
 * Modules list
     * 1 byte
-        * 1 bit
+        * bit 0
             * `has_block_cooldown` flag
-        * 7 bits
-            * `method_count` = value + 1
-            * Range = [1, 128]
+        * bits 1..7
+            * `method_count`
+            * Unsigned 7-bit integer
+            * Increment by 1 when read (range 1 - 128)
     * 32 bytes
         * `module_name`
         * String
     * If `has_block_cooldown`
         * 4 bytes
             * `block_cooldown`
+            * Unsigned 32-bit integer
     * Methods list
         * 1 byte
-            * 1 bit
+            * bit 0
                 * `has_block_cooldown` flag
-            * 1 bit
+            * bit 1
                 * `has_pact` flag
-            * 6 bits
+            * bit 2..7
                 * reserved/unused
         * 32 bytes
             * `method_name`
@@ -62,40 +65,44 @@ A CENNZnut contains:
         * If `block_cooldown` is set
             * 4 bytes
                 * `block_cooldown`
+                * Unsigned 32-bit integer
         * If `has_pact` is set
             * 1 byte
-                * `pact_length` = value + 1
+                * `pact_length`
+                * Unsigned 8-bit integer
+                * Increment by 1 when read (range 1 - 256)
             * `pact_length` bytes
                 * `pact`
 * 1 byte
     * `contract_count` = value
 * Contracts list
     * 1 byte
-        * 1 bit
+        * bit 0
             * `has_block_cooldown` flag
-        * 7 bits
+        * bits 1..7
             * Reserved
     * 32 bytes
         * `contract_address`
     * If `has_block_cooldown`
         * 4 bytes
             * `block_cooldown`
+            * Unsigned 32-bit integer
 
 ### Decode Steps
 
 1. Read the first byte, as `module_count` and increment it by 1
 2. Begin reading module list items
     1. Read the first byte
-        - Read the first bit as `has_block_cooldown` Boolean
-        - Read the last 7 bits as `method_count` and increment it by 1
+        - Read bit 0 as `has_block_cooldown` Boolean
+        - Read bits 1..7 as `method_count` and increment it by 1
     2. Read 32 bytes as `module_name`
     3. If `has_block_cooldown`
         - Read 4 bytes as `block_cooldown`
     4. Begin reading methods list items
         1. Read the first byte
-            - Read the first bit as `has_block_cooldown` Boolean
-            - Read the second bit as `has_pact` Boolean
-            - Ignore 6 bits
+            - Read bit 0 as `has_block_cooldown` Boolean
+            - Read bit 1 as `has_pact` Boolean
+            - Ignore remaining bits
         2. Read 32 bytes as `method_name`
         3. If `has_block_cooldown`
             - Read 4 bytes as `block_cooldown`
@@ -108,7 +115,7 @@ A CENNZnut contains:
 3. Read the next byte, as `contract_count`
 4. Begin reading contract list items
     1. Read the first byte
-        - Read the first bit as `has_block_cooldown` Boolean
+        - Read the bit 0 as `has_block_cooldown` Boolean
     2. Read 32 bytes as `contract_address`
     3. If `has_block_cooldown`
         - Read 4 bytes as `block_cooldown`
