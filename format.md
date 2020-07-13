@@ -38,6 +38,7 @@ To verify a doughnut:
         * How this is done depends on the payload version
     3. Verify `SIGNATURE` is valid given a message of `<VERSION><PAYLOAD>` and a signer of `ISSUER`
         * How this is done depends on the signing method
+        * For Schnorrkel the 'signing context' should be `b'doughnut'`
 2. Verify the payload
     * How this is done depends on the payload version
 3. Verify the length of the doughnut does not exceed what is inferred by the `PAYLOAD`
